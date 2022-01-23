@@ -12,6 +12,7 @@ import { auth } from "../firebase";
 
 import globalStyles from "../globalStyles";
 import { useNavigation } from "@react-navigation/native";
+import CustomButton from "../components/CustomButton";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -44,16 +45,12 @@ const Login = () => {
         value={password}
         secureTextEntry
       />
-      <Pressable
+      <CustomButton
         onPress={handleLogin}
-        style={({ pressed }) => [
-          { opacity: pressed ? 0.5 : 1.0 },
-          globalStyles.button,
-          styles.button,
-        ]}
-      >
-        <Text style={globalStyles.buttonText}>Log In</Text>
-      </Pressable>
+        buttonStyle={[globalStyles.button, globalStyles.buttonSolid]}
+        buttonTextStyle={globalStyles.buttonSolidTextStyle}
+        text="Log in"
+      />
     </KeyboardAvoidingView>
   );
 };
