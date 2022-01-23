@@ -13,7 +13,7 @@ export default StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "700",
-    fontsize: 16,
+    fontSize: 16,
   },
   input: {
     width: "80%",
