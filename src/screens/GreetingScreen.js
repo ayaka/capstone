@@ -1,4 +1,11 @@
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  LogBox,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -6,6 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 
 import CustomButton from "../components/CustomButton";
 import globalStyles from "../globalStyles";
+
+LogBox.ignoreLogs([
+  "AsyncStorage has been extracted from react-native core and will be removed in a future release",
+]);
 
 const GreetingScreen = () => {
   const navigation = useNavigation();
@@ -40,7 +51,7 @@ const GreetingScreen = () => {
           {/* change user.email to user.username */}
           <Text style={styles.title}>Welcome Back{"\n" + user.email}</Text>
           <Pressable
-            // onPress={() => navigation.replace("Home")}
+            onPress={() => navigation.replace("Home", { uid: user.uid })}
             style={({ pressed }) => [
               { opacity: pressed ? 0.5 : 1.0 },
               styles.icon,
@@ -61,7 +72,6 @@ const GreetingScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.greetingContainer}>
         <Greeting />
-        {/* <Text>{loading ? "Loading..." : null}</Text> */}
       </View>
       <View style={styles.buttonContainer}>
         <CustomButton
@@ -105,15 +115,15 @@ const styles = StyleSheet.create({
   },
   icon: {
     width: 130,
-    height: 70,
+    height: 130,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "pink",
-    borderRadius: 35,
+    borderRadius: 65,
   },
   text: {},
   title: {
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 25,
   },
 });
