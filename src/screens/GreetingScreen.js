@@ -39,7 +39,7 @@ const GreetingScreen = () => {
 
   const directRegister = async () => {
     await signOut(auth);
-    // navigation.navigate("Register")
+    navigation.navigate("Register");
   };
 
   const Greeting = () => {

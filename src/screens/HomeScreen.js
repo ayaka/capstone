@@ -13,10 +13,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const loadInfo = async () => {
       try {
-        const docRef = doc(db, "users", route.params.uid);
-        const docSnap = await getDoc(docRef);
-        setUser(docSnap.data());
-        setLoading(false);
+        console.log(route.params);
       } catch (error) {
         console.log(error.message);
       }
