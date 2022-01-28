@@ -9,6 +9,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 import CustomButton from "../components/CustomButton";
@@ -23,14 +25,45 @@ const GreetingScreen = () => {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  let pet;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
+      if (currentUser) {
+        getDoc(doc(db, "users", currentUser.uid))
+          .then((userDocSnap) => {
+            if (userDocSnap.exists()) {
+              setUser(userDocSnap.data());
+            }
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+      } else {
+        setLoading(false);
+      }
     });
     return unsubscribe;
   }, []);
+
+  const directHome = async () => {
+    try {
+      const petDocSnap = await getDoc(doc(db, "pets", user.petId));
+      if (petDocSnap.exists()) {
+        navigation.replace("Home", {
+          pet: petDocSnap.data(),
+          user: user,
+        });
+      } else {
+        throw {
+          message: "Something went wrong. Please log in or register below.",
+        };
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const directLogin = async () => {
     await signOut(auth);
@@ -48,19 +81,17 @@ const GreetingScreen = () => {
     } else if (user) {
       return (
         <View style={styles.greeting}>
-          {/* change user.email to user.username */}
-          <Text style={styles.title}>Welcome Back{"\n" + user.email}</Text>
+          <Text style={styles.title}>Welcome Back{"\n" + user.username}</Text>
           <Pressable
-            onPress={() => navigation.replace("Home", { uid: user.uid })}
+            onPress={directHome}
             style={({ pressed }) => [
               { opacity: pressed ? 0.5 : 1.0 },
               styles.icon,
             ]}
           >
-            <Text>Main Page</Text>
+            <Text style={styles.iconText}>Go to{"\n"}Main Page</Text>
           </Pressable>
-          {/* change user.email to user.username */}
-          <Text style={styles.text}>Not {user.email}?</Text>
+          <Text style={styles.text}>Not {user.username}?</Text>
         </View>
       );
     } else {
@@ -121,7 +152,9 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
     borderRadius: 65,
   },
-  text: {},
+  iconText: {
+    textAlign: "center",
+  },
   title: {
     textAlign: "center",
     fontSize: 25,

@@ -29,11 +29,8 @@ const RegisterScreen = () => {
     try {
       const petDocRef = await getPetDocRef();
       const userDocRef = await getUserDocRef(petDocRef.id);
-      console.log("test1");
       const petDocSnap = await getDocSnap(petDocRef);
-      console.log("test2");
       const userDocSnap = await getDocSnap(userDocRef);
-      console.log("test3");
 
       navigation.replace("Home", {
         pet: petDocSnap.data(),
