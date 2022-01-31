@@ -35,4 +35,9 @@ export default StyleSheet.create({
     borderRadius: 10,
     margin: 10,
   },
+  statusContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
