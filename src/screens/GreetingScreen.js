@@ -25,12 +25,14 @@ const GreetingScreen = () => {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  let pet;
+  let userDocRef;
+  let petDocRef;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        getDoc(doc(db, "users", currentUser.uid))
+        userDocRef = doc(db, "users", currentUser.uid);
+        getDoc(userDocRef)
           .then((userDocSnap) => {
             if (userDocSnap.exists()) {
               setUser(userDocSnap.data());
@@ -49,11 +51,14 @@ const GreetingScreen = () => {
 
   const directHome = async () => {
     try {
-      const petDocSnap = await getDoc(doc(db, "pets", user.petId));
+      petDocRef = doc(db, "pets", user.petId);
+      const petDocSnap = await getDoc(petDocRef);
       if (petDocSnap.exists()) {
         navigation.replace("Home", {
-          pet: petDocSnap.data(),
+          // pet: petDocSnap.data(),
+          // petDocRef: petDocRef,
           user: user,
+          // user: userDocRef,
         });
       } else {
         throw {

@@ -13,6 +13,8 @@ import { auth } from "../firebase";
 import globalStyles from "../globalStyles";
 import { useNavigation } from "@react-navigation/native";
 import CustomButton from "../components/CustomButton";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -22,11 +24,30 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // navigation.replace("Home")
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const userDocRef = doc(db, "users", cred.user.uid);
+      const userDocSnap = await getDocSnap(userDocRef);
+      const petDocRef = doc(db, "pets", userDocSnap.data().petId);
+      const petDocSnap = await getDocSnap(petDocRef);
+
+      navigation.replace("Home", {
+        // pet: petDocSnap.data(),
+        // petDocRef: petDocRef,
+        user: userDocSnap.data(),
+        // userDocRef: userDocRef,
+      });
     } catch (error) {
       // Alert.alert("Error", error.message);
       console.log(error);
+    }
+  };
+
+  const getDocSnap = async (docRef) => {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap;
+    } else {
+      throw { message: "No data found" };
     }
   };
 
@@ -48,7 +69,7 @@ const Login = () => {
       <CustomButton
         onPress={handleLogin}
         buttonStyle={[globalStyles.button, globalStyles.buttonSolid]}
-        buttonTextStyle={globalStyles.buttonSolidTextStyle}
+        buttonTextStyle={globalStyles.buttonSolidText}
         text="Log in"
       />
     </KeyboardAvoidingView>

@@ -6,6 +6,7 @@ import globalColors from "../globalColors";
 const CustomIcon = (props) => {
   return (
     <Pressable
+      onPress={props.onPress}
       style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }, styles.icon]}
     >
       <Text style={styles.text}>{props.text}</Text>

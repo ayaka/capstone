@@ -1,14 +1,8 @@
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native";
 import React, { useState } from "react";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth } from "../firebase";
 import { db } from "../firebase";
 import CustomButton from "../components/CustomButton";
@@ -33,8 +27,10 @@ const RegisterScreen = () => {
       const userDocSnap = await getDocSnap(userDocRef);
 
       navigation.replace("Home", {
-        pet: petDocSnap.data(),
+        // pet: petDocSnap.data(),
+        // petDocRef: petDocRef,
         user: userDocSnap.data(),
+        // userDocRef: userDocRef,
       });
     } catch (error) {
       console.log(error.message);
@@ -43,7 +39,6 @@ const RegisterScreen = () => {
   };
 
   const getDocSnap = async (docRef) => {
-    console.log(docRef);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return docSnap;
@@ -61,7 +56,20 @@ const RegisterScreen = () => {
       await setDoc(docRef, {
         id: docRef.id,
         name: petName,
+        food: {
+          leftover: [null, null],
+          breakfast: [false, null],
+          dinner: [false, null],
+          treat: [false, null],
+          extraTreats: 0,
+        },
+        walk: {
+          am: [false, null],
+          pm: [false, null],
+        },
+        outside: [false, null],
       });
+
       return docRef;
     } else if (petId) {
       // access existing pet account
