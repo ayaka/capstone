@@ -1,6 +1,6 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { db } from "../firebase";
@@ -39,7 +39,12 @@ const HomeScreen = () => {
           onPress={() => navigation.navigate("Food", { petId: pet.id })}
           text="Meals & Snacks"
         />
-        <CustomIcon text="Backyard" />
+        <CustomIcon
+          onPress={() =>
+            navigation.navigate({ name: "Location", params: { petId: pet.id } })
+          }
+          text="Inside / Outside"
+        />
         <CustomIcon text="Walk" />
       </View>
     </SafeAreaView>

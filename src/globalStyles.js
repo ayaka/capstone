@@ -27,6 +27,11 @@ export default StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   input: {
     width: "80%",
     backgroundColor: "#fff",
@@ -39,5 +44,10 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  statusTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    textAlign: "center",
   },
 });
