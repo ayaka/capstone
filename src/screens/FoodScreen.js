@@ -1,4 +1,6 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { IconButton, RadioButton } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   sectionContainer: {
-    flex: 1,
+    height: "90%",
     justifyContent: "space-evenly",
     alignItems: "center",
   },
