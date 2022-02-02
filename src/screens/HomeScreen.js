@@ -9,6 +9,8 @@ import { doc, onSnapshot } from "firebase/firestore";
 import globalColors from "../globalColors";
 import CustomIcon from "../components/CustomIcon";
 
+import * as Location from "expo-location";
+
 const HomeScreen = () => {
   const navigation = useNavigation();
 
@@ -17,13 +19,45 @@ const HomeScreen = () => {
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [currentWeather, setCurrentWeather] = useState(null);
+
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "pets", user.petId), (doc) => {
-      setPet(doc.data());
-      setLoading(false);
-    });
+    let unsubscribe;
+    try {
+      unsubscribe = onSnapshot(doc(db, "pets", user.petId), (doc) => {
+        setPet(doc.data());
+        setLoading(false);
+      });
+      loadWeather().then((result) => {
+        setCurrentWeather(result);
+      });
+    } catch (error) {
+      alert(error.message);
+    }
     return () => unsubscribe();
   }, []);
+
+  const loadWeather = async () => {
+    const location = await loadLocation();
+    const { latitude, longitude } = location.coords;
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}`;
+    const response = await fetch(weatherUrl);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw { message: result.message };
+    }
+  };
+
+  const loadLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      // setErrorMessage("Permission to access location was denied");
+      throw { message: "Permission to access location was denied" };
+    }
+    return await Location.getCurrentPositionAsync({});
+  };
 
   return loading ? (
     <SafeAreaView style={styles.container}>
@@ -31,6 +65,8 @@ const HomeScreen = () => {
     </SafeAreaView>
   ) : (
     <SafeAreaView style={styles.container}>
+      <Text>{currentWeather && currentWeather.weather[0].description}</Text>
+
       <View style={styles.mainContainer}>
         <Text>{pet.name}</Text>
       </View>
