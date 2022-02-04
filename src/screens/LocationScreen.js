@@ -17,7 +17,6 @@ const LocationScreen = () => {
   const [loading, setLoading] = useState(true);
   const docRef = doc(db, "pets", route.params.petId);
 
-  console.log(location);
   useEffect(() => {
     const unsubscribe = onSnapshot(docRef, (doc) => {
       setStatus({ ...doc.data().walk, outside: doc.data().outside });
