@@ -18,15 +18,15 @@ export default CustomIcon;
 
 const styles = StyleSheet.create({
   icon: {
-    width: 70,
-    height: 70,
-    borderRadius: 10,
+    width: "47.5%",
+    aspectRatio: 1,
+    // borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: globalColors.while,
+    backgroundColor: globalColors.blue,
   },
   text: {
-    color: globalColors.blue,
+    color: globalColors.white,
     fontSize: 13,
     fontWeight: "700",
     textAlign: "center",

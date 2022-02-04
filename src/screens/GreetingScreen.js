@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import CustomButton from "../components/CustomButton";
 import globalStyles from "../globalStyles";
+import globalColors from "../globalColors";
 
 LogBox.ignoreLogs([
   "AsyncStorage has been extracted from react-native core and will be removed in a future release",
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     height: 130,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "pink",
+    backgroundColor: globalColors.green,
     borderRadius: 65,
   },
   iconText: {
