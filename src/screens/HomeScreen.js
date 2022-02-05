@@ -11,6 +11,7 @@ import CustomIcon from "../components/CustomIcon";
 
 import * as Location from "expo-location";
 import globalStyles from "../globalStyles";
+import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -82,8 +83,10 @@ const HomeScreen = () => {
           <View style={styles.weatherCurrent}>
             <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
             {/* <View> */}
-            <Text style={styles.weatherDescription}>{description}</Text>
-            <Text>{temp}</Text>
+            <Text style={[styles.text, styles.weatherDescription]}>
+              {description}
+            </Text>
+            <Text style={styles.text}>{temp}</Text>
             {/* </View> */}
           </View>
 
@@ -91,8 +94,10 @@ const HomeScreen = () => {
           {/* <View style={styles.weatherForecast}></View> */}
         </View>
       );
+    } else if (errorMessage) {
+      return <Text style={styles.text}>{errorMessage}</Text>;
     } else {
-      return <Text>{errorMessage}</Text>;
+      return <ActivityIndicator animating={true} color={globalColors.blue} />;
     }
   };
 
@@ -111,7 +116,12 @@ const HomeScreen = () => {
 
         <View style={styles.petSectionContainer}>
           <View style={styles.petContainer}>
-            <Text style={styles.text}>Pet info here</Text>
+            <View style={styles.imageContainer}>
+              <Image
+                style={styles.image}
+                source={require("../assets/IMG_0024.jpg")}
+              />
+            </View>
           </View>
         </View>
 
@@ -119,7 +129,8 @@ const HomeScreen = () => {
           <View style={styles.iconContainer}>
             <CustomIcon
               onPress={() => navigation.navigate("Food", { petId: pet.id })}
-              text="Meals & Snacks"
+              text1="Meals &"
+              text2="Snacks"
             />
             <CustomIcon
               onPress={() =>
@@ -128,7 +139,8 @@ const HomeScreen = () => {
                   params: { petId: pet.id },
                 })
               }
-              text="Inside / Outside"
+              text1="Inside /"
+              text2="Outside"
             />
           </View>
         </View>
@@ -158,6 +170,16 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: "10%",
   },
+  image: {
+    resizeMode: "contain",
+    width: 200,
+    height: 300,
+  },
+  imageContainer: {
+    width: "80%",
+    aspectRatio: 1,
+    backgroundColor: globalColors.white,
+  },
   mainContainer: {
     flex: 1,
     width: "100%",
@@ -168,8 +190,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignContent: "center",
-    backgroundColor: globalColors.green,
+    alignItems: "center",
+    backgroundColor: globalColors.black,
   },
   petSectionContainer: {
     flex: 3,
@@ -178,14 +200,18 @@ const styles = StyleSheet.create({
     paddingVertical: "5%",
   },
   text: {
-    textAlign: "center",
+    color: globalColors.olive,
+    fontSize: 13,
+    fontWeight: "700",
   },
   weatherContainer: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
     alignContent: "center",
-    backgroundColor: globalColors.white,
+    // backgroundColor: "#ff8552",
+    // backgroundColor: "#f6ae2d",
+    backgroundColor: "#f9df74",
   },
   weatherDescription: {
     textTransform: "capitalize",

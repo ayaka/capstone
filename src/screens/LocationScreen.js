@@ -62,12 +62,12 @@ const LocationScreen = () => {
           />
 
           <CustomSwitch
-            value={status.pm[0]}
-            onValueChange={togglePmWalk}
-            title="PM walk"
+            value={status.am[0]}
+            onValueChange={toggleAmWalk}
+            title="AM walk"
             text={
-              status.pm[1]
-                ? `Went out for a walk at ${status.pm[1]
+              status.am[1]
+                ? `Went out for a walk at ${status.am[1]
                     .toDate()
                     .toLocaleTimeString()}`
                 : "Hasn't been walked this morning"
@@ -75,12 +75,12 @@ const LocationScreen = () => {
           />
 
           <CustomSwitch
-            value={status.am[0]}
-            onValueChange={toggleAmWalk}
-            title="AM walk"
+            value={status.pm[0]}
+            onValueChange={togglePmWalk}
+            title="PM walk"
             text={
-              status.am[1]
-                ? `Went out for a walk at ${status.am[1]
+              status.pm[1]
+                ? `Went out for a walk at ${status.pm[1]
                     .toDate()
                     .toLocaleTimeString()}`
                 : "Hasn't been walked this morning"

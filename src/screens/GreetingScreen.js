@@ -67,12 +67,12 @@ const GreetingScreen = () => {
   };
 
   const directLogin = async () => {
-    await signOut(auth);
+    // await signOut(auth);
     navigation.navigate("Login");
   };
 
   const directRegister = async () => {
-    await signOut(auth);
+    // await signOut(auth);
     navigation.navigate("Register");
   };
 
@@ -82,7 +82,9 @@ const GreetingScreen = () => {
     } else if (user) {
       return (
         <View style={styles.greeting}>
-          <Text style={styles.title}>Welcome Back{"\n" + user.username}</Text>
+          <Text style={[styles.text, styles.title]}>
+            Welcome Back{"\n" + user.username}
+          </Text>
           <Pressable
             onPress={directHome}
             style={({ pressed }) => [
@@ -90,7 +92,9 @@ const GreetingScreen = () => {
               styles.icon,
             ]}
           >
-            <Text style={styles.iconText}>Go to{"\n"}Main Page</Text>
+            <Text style={[styles.text, styles.iconText]}>
+              Go to{"\n"}Main Page
+            </Text>
           </Pressable>
           <Text style={styles.text}>Not {user.username}?</Text>
         </View>
@@ -150,11 +154,15 @@ const styles = StyleSheet.create({
     height: 130,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: globalColors.green,
+    backgroundColor: globalColors.lightGreen,
     borderRadius: 65,
   },
   iconText: {
     textAlign: "center",
+    fontWeight: "700",
+  },
+  text: {
+    color: globalColors.olive,
   },
   title: {
     textAlign: "center",

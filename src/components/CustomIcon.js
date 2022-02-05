@@ -9,7 +9,8 @@ const CustomIcon = (props) => {
       onPress={props.onPress}
       style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }, styles.icon]}
     >
-      <Text style={styles.text}>{props.text}</Text>
+      <Text style={styles.text}>{props.text1}</Text>
+      <Text style={styles.text}>{props.text2}</Text>
     </Pressable>
   );
 };
@@ -24,10 +25,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: globalColors.blue,
+    // backgroundColor: "#86e7b8",
   },
   text: {
-    color: globalColors.white,
-    fontSize: 13,
+    color: globalColors.olive,
+    fontSize: 16,
     fontWeight: "700",
     textAlign: "center",
   },

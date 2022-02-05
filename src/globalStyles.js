@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import globalColors from "./globalColors";
 
 export default StyleSheet.create({
   button: {
@@ -10,15 +11,15 @@ export default StyleSheet.create({
     margin: 15,
   },
   buttonSolid: {
-    backgroundColor: "#0782f9",
+    backgroundColor: globalColors.blue,
   },
   buttonOutline: {
     backgroundColor: "#fff",
-    borderColor: "#0782f9",
+    borderColor: globalColors.blue,
     borderWidth: 2,
   },
   buttonOutlineText: {
-    color: "#0782f9",
+    color: globalColors.blue,
     fontWeight: "700",
     fontSize: 16,
   },
