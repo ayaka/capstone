@@ -1,13 +1,14 @@
-import { FIREBASE_API_KEY } from "@env";
+// import { FIREBASE_API_KEY } from "@env";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "capstone-4d645.firebaseapp.com",
   projectId: "capstone-4d645",
@@ -22,3 +23,5 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 export const db = getFirestore();
+
+export const storage = getStorage();

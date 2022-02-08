@@ -9,6 +9,7 @@ import GreetingScreen from "./src/screens/GreetingScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import LocationScreen from "./src/screens/LocationScreen";
+import ImageCaptureScreen from "./src/screens/ImageCaptureScreen";
 
 import FoodScreen from "./src/screens/FoodScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -43,6 +44,7 @@ export default function App() {
             />
             <Stack.Screen name="Food" component={FoodScreen} />
             <Stack.Screen name="Location" component={LocationScreen} />
+            <Stack.Screen name="ImageCapture" component={ImageCaptureScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

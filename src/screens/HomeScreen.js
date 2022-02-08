@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -117,6 +117,13 @@ const HomeScreen = () => {
         <View style={styles.petSectionContainer}>
           <View style={styles.petContainer}>
             <View style={styles.imageContainer}>
+              <Pressable
+                onPress={() =>
+                  navigation.navigate("ImageCapture", { petId: pet.id })
+                }
+              >
+                <Text>Add Image</Text>
+              </Pressable>
               <Image
                 style={styles.image}
                 source={require("../assets/IMG_0024.jpg")}
