@@ -2,15 +2,17 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
-import { db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { IconButton } from "react-native-paper";
 
 import globalColors from "../globalColors";
 import CustomIcon from "../components/CustomIcon";
 
+import { db } from "../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+
 import * as Location from "expo-location";
 import globalStyles from "../globalStyles";
+import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -82,8 +84,10 @@ const HomeScreen = () => {
           <View style={styles.weatherCurrent}>
             <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
             {/* <View> */}
-            <Text style={styles.weatherDescription}>{description}</Text>
-            <Text>{temp}</Text>
+            <Text style={[styles.text, styles.weatherDescription]}>
+              {description}
+            </Text>
+            <Text style={styles.text}>{temp}</Text>
             {/* </View> */}
           </View>
 
@@ -91,8 +95,10 @@ const HomeScreen = () => {
           {/* <View style={styles.weatherForecast}></View> */}
         </View>
       );
+    } else if (errorMessage) {
+      return <Text style={styles.text}>{errorMessage}</Text>;
     } else {
-      return <Text>{errorMessage}</Text>;
+      return <ActivityIndicator animating={true} color={globalColors.blue} />;
     }
   };
 
@@ -111,7 +117,32 @@ const HomeScreen = () => {
 
         <View style={styles.petSectionContainer}>
           <View style={styles.petContainer}>
-            <Text style={styles.text}>Pet info here</Text>
+            <Text style={styles.name}>{pet.name}</Text>
+            <View style={styles.imageContainer}>
+              {pet.imageUrl ? (
+                <>
+                  <Image style={styles.image} source={{ uri: pet.imageUrl }} />
+                  <IconButton
+                    icon="camera"
+                    color={globalColors.rose}
+                    size={30}
+                    onPress={() =>
+                      navigation.navigate("ImageCapture", { petId: pet.id })
+                    }
+                    style={styles.cameraIcon}
+                  />
+                </>
+              ) : (
+                <IconButton
+                  icon="camera"
+                  color={globalColors.rose}
+                  size={60}
+                  onPress={() =>
+                    navigation.navigate("ImageCapture", { petId: pet.id })
+                  }
+                />
+              )}
+            </View>
           </View>
         </View>
 
@@ -119,7 +150,8 @@ const HomeScreen = () => {
           <View style={styles.iconContainer}>
             <CustomIcon
               onPress={() => navigation.navigate("Food", { petId: pet.id })}
-              text="Meals & Snacks"
+              text1="Meals &"
+              text2="Snacks"
             />
             <CustomIcon
               onPress={() =>
@@ -128,7 +160,8 @@ const HomeScreen = () => {
                   params: { petId: pet.id },
                 })
               }
-              text="Inside / Outside"
+              text1="Inside /"
+              text2="Outside"
             />
           </View>
         </View>
@@ -140,6 +173,11 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  cameraIcon: {
+    position: "absolute",
+    top: -10,
+    right: -10,
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -151,41 +189,60 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // backgroundColor: globalColors.blue,
   },
   iconSectionContainer: {
-    // flex: 1,
+    flex: 1,
     width: "100%",
-    paddingHorizontal: "10%",
+  },
+  image: {
+    resizeMode: "contain",
+    height: "90%",
+    width: "90%",
+  },
+  imageContainer: {
+    width: "90%",
+    aspectRatio: 1,
+    backgroundColor: globalColors.white,
+    justifyContent: "center",
+    alignItems: "center",
   },
   mainContainer: {
     flex: 1,
     width: "100%",
     paddingVertical: "10%",
+    paddingHorizontal: "10%",
     justifyContent: "space-between",
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: globalColors.white,
+    position: "absolute",
+    top: "2.5%",
   },
   petContainer: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignContent: "center",
-    backgroundColor: globalColors.green,
+    alignItems: "center",
+    backgroundColor: globalColors.black,
   },
   petSectionContainer: {
     flex: 3,
     width: "100%",
-    paddingHorizontal: "10%",
     paddingVertical: "5%",
   },
   text: {
-    textAlign: "center",
+    color: globalColors.black,
+    fontSize: 13,
+    fontWeight: "700",
   },
   weatherContainer: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
     alignContent: "center",
-    backgroundColor: globalColors.white,
+    backgroundColor: globalColors.yellow,
   },
   weatherDescription: {
     textTransform: "capitalize",
@@ -213,7 +270,5 @@ const styles = StyleSheet.create({
   weatherSectionContainer: {
     flex: 1,
     width: "100%",
-    paddingHorizontal: "10%",
-    // paddingVertical: "5%",
   },
 });
