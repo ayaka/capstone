@@ -8,11 +8,10 @@ export default {
   lightGreen: "#bdd9bf",
   white: "#f7ede2",
   pink: "#fce4d8",
-  yellow: "#eaf8bf",
-  yellow2: "#eee3ab",
-  // yellow: "#fbd87f",
+  yellow: "#f9df74",
   honeydew: "#e5f4e3",
   black: "#291f1e",
   olive: "#393a10",
   arcticLime: "#e0ff4f",
+  rose: "#ab4e68",
 };

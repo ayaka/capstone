@@ -1,25 +1,24 @@
-import {
-  Button,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { Button, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { ActivityIndicator } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import { manipulateAsync } from "expo-image-manipulator";
 import { useNavigation, useRoute } from "@react-navigation/native";
+
+import globalColors from "../globalColors";
 
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const ImageCaptureScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  // const [image, setImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   const pickImage = async () => {
+    setUploading(true);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -29,7 +28,7 @@ const ImageCaptureScreen = () => {
 
     if (!result.cancelled) {
       try {
-        const compressedImage = await manipulateAsync(
+        const modImage = await manipulateAsync(
           result.uri,
           [
             {
@@ -43,8 +42,11 @@ const ImageCaptureScreen = () => {
           }
         );
 
-        const url = await uploadImage(compressedImage.uri);
-        console.log(url);
+        const url = await uploadImage(modImage.uri);
+        const docRef = doc(db, "pets", route.params.petId);
+        updateDoc(docRef, {
+          imageUrl: url,
+        }).then(() => navigation.popToTop());
       } catch (error) {
         alert(error.message);
       }
@@ -64,10 +66,11 @@ const ImageCaptureScreen = () => {
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {/* {image && (
-        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-      )} */}
+      {uploading ? (
+        <ActivityIndicator animating={true} color={globalColors.blue} />
+      ) : (
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
+      )}
     </View>
   );
 };

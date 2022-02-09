@@ -20,15 +20,13 @@ export default CustomIcon;
 const styles = StyleSheet.create({
   icon: {
     width: "47.5%",
-    aspectRatio: 1,
-    // borderRadius: 10,
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: globalColors.blue,
-    // backgroundColor: "#86e7b8",
   },
   text: {
-    color: globalColors.olive,
+    color: globalColors.black,
     fontSize: 16,
     fontWeight: "700",
     textAlign: "center",

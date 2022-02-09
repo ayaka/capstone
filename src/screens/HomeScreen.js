@@ -1,13 +1,14 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
-import { db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { IconButton } from "react-native-paper";
 
 import globalColors from "../globalColors";
 import CustomIcon from "../components/CustomIcon";
+
+import { db } from "../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
 import * as Location from "expo-location";
 import globalStyles from "../globalStyles";
@@ -116,18 +117,31 @@ const HomeScreen = () => {
 
         <View style={styles.petSectionContainer}>
           <View style={styles.petContainer}>
+            <Text style={styles.name}>{pet.name}</Text>
             <View style={styles.imageContainer}>
-              <Pressable
-                onPress={() =>
-                  navigation.navigate("ImageCapture", { petId: pet.id })
-                }
-              >
-                <Text>Add Image</Text>
-              </Pressable>
-              <Image
-                style={styles.image}
-                source={require("../assets/IMG_0024.jpg")}
-              />
+              {pet.imageUrl ? (
+                <>
+                  <Image style={styles.image} source={{ uri: pet.imageUrl }} />
+                  <IconButton
+                    icon="camera"
+                    color={globalColors.rose}
+                    size={30}
+                    onPress={() =>
+                      navigation.navigate("ImageCapture", { petId: pet.id })
+                    }
+                    style={styles.cameraIcon}
+                  />
+                </>
+              ) : (
+                <IconButton
+                  icon="camera"
+                  color={globalColors.rose}
+                  size={60}
+                  onPress={() =>
+                    navigation.navigate("ImageCapture", { petId: pet.id })
+                  }
+                />
+              )}
             </View>
           </View>
         </View>
@@ -159,6 +173,11 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  cameraIcon: {
+    position: "absolute",
+    top: -10,
+    right: -10,
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -170,28 +189,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // backgroundColor: globalColors.blue,
   },
   iconSectionContainer: {
-    // flex: 1,
+    flex: 1,
     width: "100%",
-    paddingHorizontal: "10%",
   },
   image: {
     resizeMode: "contain",
-    width: 200,
-    height: 300,
+    height: "90%",
+    width: "90%",
   },
   imageContainer: {
-    width: "80%",
+    width: "90%",
     aspectRatio: 1,
     backgroundColor: globalColors.white,
+    justifyContent: "center",
+    alignItems: "center",
   },
   mainContainer: {
     flex: 1,
     width: "100%",
     paddingVertical: "10%",
+    paddingHorizontal: "10%",
     justifyContent: "space-between",
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: globalColors.white,
+    position: "absolute",
+    top: "2.5%",
   },
   petContainer: {
     flex: 1,
@@ -203,11 +230,10 @@ const styles = StyleSheet.create({
   petSectionContainer: {
     flex: 3,
     width: "100%",
-    paddingHorizontal: "10%",
     paddingVertical: "5%",
   },
   text: {
-    color: globalColors.olive,
+    color: globalColors.black,
     fontSize: 13,
     fontWeight: "700",
   },
@@ -216,9 +242,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignContent: "center",
-    // backgroundColor: "#ff8552",
-    // backgroundColor: "#f6ae2d",
-    backgroundColor: "#f9df74",
+    backgroundColor: globalColors.yellow,
   },
   weatherDescription: {
     textTransform: "capitalize",
@@ -246,7 +270,5 @@ const styles = StyleSheet.create({
   weatherSectionContainer: {
     flex: 1,
     width: "100%",
-    paddingHorizontal: "10%",
-    // paddingVertical: "5%",
   },
 });
