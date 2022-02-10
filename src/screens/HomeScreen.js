@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -22,7 +22,7 @@ const HomeScreen = () => {
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [currentWeather, setCurrentWeather] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const HomeScreen = () => {
       alert(error.message);
     }
     loadWeather().then((result) => {
-      setCurrentWeather(result);
+      setWeatherData(result);
     });
     return () => unsubscribe();
   }, []);
@@ -68,31 +68,39 @@ const HomeScreen = () => {
     return await Location.getCurrentPositionAsync({});
   };
 
-  const WeatherInfo = () => {
-    if (currentWeather) {
-      const {
-        current: {
-          temp,
-          weather: [{ icon, description }],
-        },
-      } = currentWeather;
+  const getWeatherInfo = (data) => {
+    // const {
+    //   current: {
+    //     temp,
+    //     weather: [{ icon, description }],
+    //   },
+    // } = data;
 
-      const iconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`;
+    const {
+      temp: kelvin,
+      weather: [{ icon, description }],
+    } = data;
+
+    const iconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`;
+    // kelvin to fahrenheit
+    const temp = Math.round(((kelvin - 273.15) * 9) / 5 + 32);
+
+    return { temp, iconUrl, description };
+  };
+
+  const CurrentWeather = () => {
+    if (weatherData) {
+      const { temp, iconUrl, description } = getWeatherInfo(
+        weatherData.current
+      );
 
       return (
-        <View style={globalStyles.container}>
-          <View style={styles.weatherCurrent}>
-            <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
-            {/* <View> */}
-            <Text style={[styles.text, styles.weatherDescription]}>
-              {description}
-            </Text>
-            <Text style={styles.text}>{temp}</Text>
-            {/* </View> */}
-          </View>
-
-          {/* possible enhancement */}
-          {/* <View style={styles.weatherForecast}></View> */}
+        <View style={styles.weatherCurrent}>
+          <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
+          <Text style={[styles.text, styles.weatherDescription]}>
+            {description}
+          </Text>
+          <Text style={styles.text}>{temp}°</Text>
         </View>
       );
     } else if (errorMessage) {
@@ -100,6 +108,38 @@ const HomeScreen = () => {
     } else {
       return <ActivityIndicator animating={true} color={globalColors.blue} />;
     }
+  };
+
+  const WeatherForecast = () => {
+    const data = weatherData.hourly.map((hourlyData, hour) => {
+      const { temp, iconUrl } = getWeatherInfo(hourlyData);
+      return { temp, iconUrl, hour };
+    });
+
+    return (
+      <View style={styles.weatherForecast}>
+        <Text style={[styles.text, { fontSize: 11, marginRight: 10 }]}>
+          Next
+        </Text>
+        <FlatList
+          keyExtractor={(item) => item.hour}
+          data={data}
+          horizontal={true}
+          renderItem={({ item }) => (
+            <View style={styles.weatherForecastHour}>
+              <Text style={[styles.text, { fontSize: 11 }]}>
+                {item.hour + 1}h
+              </Text>
+              <Image
+                style={{ width: 25, height: 25 }}
+                source={{ uri: item.iconUrl }}
+              />
+              <Text style={[styles.text, { fontSize: 11 }]}>{item.temp}°</Text>
+            </View>
+          )}
+        />
+      </View>
+    );
   };
 
   return loading ? (
@@ -110,9 +150,16 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
         <View style={styles.weatherSectionContainer}>
-          <View style={styles.weatherContainer}>
-            <WeatherInfo />
-          </View>
+          {weatherData ? (
+            <View style={styles.weatherContainer}>
+              <CurrentWeather />
+              <WeatherForecast />
+            </View>
+          ) : errorMessage ? (
+            <Text style={styles.text}>{errorMessage}</Text>
+          ) : (
+            <ActivityIndicator animating={true} color={globalColors.blue} />
+          )}
         </View>
 
         <View style={styles.petSectionContainer}>
@@ -209,7 +256,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: "100%",
-    paddingVertical: "10%",
+    paddingVertical: "7%",
     paddingHorizontal: "10%",
     justifyContent: "space-between",
   },
@@ -234,15 +281,14 @@ const styles = StyleSheet.create({
   },
   text: {
     color: globalColors.black,
-    fontSize: 13,
+    fontSize: 17,
     fontWeight: "700",
   },
   weatherContainer: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
-    alignContent: "center",
-    backgroundColor: globalColors.yellow,
+    alignItems: "center",
   },
   weatherDescription: {
     textTransform: "capitalize",
@@ -254,21 +300,27 @@ const styles = StyleSheet.create({
   weatherCurrent: {
     flex: 1,
     width: "100%",
-    padding: "10%",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
-  // weatherForecast: {
-  //   flex: 1,
-  //   width: "100%",
-  //   padding: "10%",
-  //   flexDirection: "row",
-  //   justifyContent: "space-between",
-  //   alignItems: "center",
-  // },
+  weatherForecast: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  weatherForecastHour: {
+    flex: 1,
+    marginHorizontal: 10,
+    alignItems: "center",
+  },
   weatherSectionContainer: {
     flex: 1,
     width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: globalColors.yellow,
+    paddingHorizontal: 20,
   },
 });

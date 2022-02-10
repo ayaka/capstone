@@ -18,7 +18,6 @@ const ImageCaptureScreen = () => {
   const [uploading, setUploading] = useState(false);
 
   const pickImage = async () => {
-    setUploading(true);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -28,6 +27,7 @@ const ImageCaptureScreen = () => {
 
     if (!result.cancelled) {
       try {
+        setUploading(true);
         const modImage = await manipulateAsync(
           result.uri,
           [
@@ -49,6 +49,7 @@ const ImageCaptureScreen = () => {
         }).then(() => navigation.popToTop());
       } catch (error) {
         alert(error.message);
+        setUploading(false);
       }
     }
   };
