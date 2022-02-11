@@ -1,9 +1,7 @@
 import {
   Alert,
   KeyboardAvoidingView,
-  Pressable,
   StyleSheet,
-  Text,
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
@@ -27,18 +25,12 @@ const Login = () => {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const userDocRef = doc(db, "users", cred.user.uid);
       const userDocSnap = await getDocSnap(userDocRef);
-      const petDocRef = doc(db, "pets", userDocSnap.data().petId);
-      const petDocSnap = await getDocSnap(petDocRef);
 
       navigation.replace("Home", {
-        // pet: petDocSnap.data(),
-        // petDocRef: petDocRef,
         user: userDocSnap.data(),
-        // userDocRef: userDocRef,
       });
     } catch (error) {
-      // Alert.alert("Error", error.message);
-      console.log(error);
+      Alert.alert("Error", error.message);
     }
   };
 
@@ -52,7 +44,11 @@ const Login = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView
+      style={globalStyles.container}
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // enabled
+    >
       <TextInput
         onChangeText={(value) => setEmail(value)}
         style={globalStyles.input}
@@ -81,10 +77,5 @@ export default Login;
 const styles = StyleSheet.create({
   button: {
     marginTop: 40,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
