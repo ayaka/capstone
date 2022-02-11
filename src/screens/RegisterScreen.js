@@ -2,7 +2,7 @@ import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native";
 import React, { useState } from "react";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { auth } from "../firebase";
 import { db } from "../firebase";
 import CustomButton from "../components/CustomButton";
@@ -56,6 +56,7 @@ const RegisterScreen = () => {
       await setDoc(docRef, {
         id: docRef.id,
         name: petName,
+        date: Timestamp.now(),
         food: {
           leftover: [null, null],
           breakfast: [false, null],

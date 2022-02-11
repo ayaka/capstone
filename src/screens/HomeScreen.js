@@ -8,7 +8,7 @@ import globalColors from "../globalColors";
 import CustomIcon from "../components/CustomIcon";
 
 import { db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, Timestamp } from "firebase/firestore";
 
 import * as Location from "expo-location";
 import globalStyles from "../globalStyles";
@@ -29,8 +29,14 @@ const HomeScreen = () => {
     let unsubscribe;
     try {
       unsubscribe = onSnapshot(doc(db, "pets", user.petId), (doc) => {
-        setPet(doc.data());
-        setLoading(false);
+        let petData = doc.data();
+
+        if (isNewDay(petData.date)) {
+          resetDailyData(petData);
+        } else {
+          setPet(petData);
+          setLoading(false);
+        }
       });
     } catch (error) {
       alert(error.message);
@@ -40,6 +46,38 @@ const HomeScreen = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  const isNewDay = (date) => {
+    // checks if app is opened for the first time today
+    const monthToday = new Date().getMonth();
+    const dateToday = new Date().getDate();
+
+    const monthDoc = new Date(date.toDate()).getMonth();
+    const dateDoc = new Date(date.toDate()).getDate();
+    return monthDoc !== monthToday || dateDoc !== dateToday;
+  };
+
+  const resetDailyData = async (data) => {
+    const newData = {
+      ...data,
+      date: Timestamp.now(),
+      food: {
+        leftover: [null, null],
+        breakfast: [false, null],
+        dinner: [false, null],
+        treat: [false, null],
+        extraTreats: 0,
+      },
+      walk: {
+        am: [false, null],
+        pm: [false, null],
+      },
+      outside: [false, null],
+    };
+
+    const docRef = doc(db, "pets", data.id);
+    await setDoc(docRef, newData);
+  };
 
   const loadWeather = async () => {
     try {
