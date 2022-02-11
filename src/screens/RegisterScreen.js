@@ -1,8 +1,20 @@
-import { KeyboardAvoidingView, StyleSheet, TextInput } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 import React, { useState } from "react";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { auth } from "../firebase";
 import { db } from "../firebase";
 import CustomButton from "../components/CustomButton";
@@ -19,22 +31,29 @@ const RegisterScreen = () => {
   const [petId, setPetId] = useState("");
   const [petName, setPetName] = useState("");
 
+  let petDocRef;
+  let userCred;
+  let userDocRef;
+
   const handleRegister = async () => {
     try {
-      const petDocRef = await getPetDocRef();
-      const userDocRef = await getUserDocRef(petDocRef.id);
-      const petDocSnap = await getDocSnap(petDocRef);
-      const userDocSnap = await getDocSnap(userDocRef);
+      await registerUser();
+      try {
+        await getPetDocRef();
+        await getUserDocRef(petDocRef.id);
+        const userDocSnap = await getDocSnap(userDocRef);
+        navigation.replace("Home", {
+          user: userDocSnap.data(),
+        });
+      } catch (error) {
+        // erase user and pet data if created in firestore
+        if (petDocRef) await deleteDoc(doc(db, "pets", petDocRef.id));
+        if (userDocRef) await deleteDoc(doc(db, "users", userDocRef.id));
 
-      navigation.replace("Home", {
-        // pet: petDocSnap.data(),
-        // petDocRef: petDocRef,
-        user: userDocSnap.data(),
-        // userDocRef: userDocRef,
-      });
+        alert(error.message);
+      }
     } catch (error) {
-      console.log(error.message);
-      // TODO: erase user and pet registration
+      alert(error.message);
     }
   };
 
@@ -48,7 +67,7 @@ const RegisterScreen = () => {
   };
 
   const getPetDocRef = async () => {
-    if (!petName && !petId) {
+    if ((!petName && !petId) || (petName && petId)) {
       throw { message: "Please enter id or name for your pet" };
     } else if (petName) {
       // register new pet
@@ -71,16 +90,20 @@ const RegisterScreen = () => {
         outside: [false, null],
       });
 
-      return docRef;
+      petDocRef = docRef;
     } else if (petId) {
       // access existing pet account
       const docRef = doc(db, "pets", petId);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        throw { message: "Invalid pet id" };
+      }
       return docRef;
     }
   };
 
   const getUserDocRef = async (petDocId) => {
-    const userCred = await registerUser();
     // create new user account
     const docRef = doc(db, "users", userCred.user.uid);
     setDoc(docRef, {
@@ -89,7 +112,7 @@ const RegisterScreen = () => {
       email: email,
       petId: petDocId,
     });
-    return docRef;
+    userDocRef = docRef;
   };
 
   const registerUser = async () => {
@@ -97,12 +120,16 @@ const RegisterScreen = () => {
     if (password !== passwordConf) {
       throw { message: "Password and password confirmation do not match" };
     }
-    const cred = createUserWithEmailAndPassword(auth, email, password);
-    return cred;
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    userCred = cred;
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView
+      style={globalStyles.container}
+      // behavior={Platform.OS === "ios" ? "padding" : "height"}
+      // enabled
+    >
       <TextInput
         onChangeText={(value) => setUsername(value)}
         style={globalStyles.input}
@@ -154,11 +181,3 @@ const RegisterScreen = () => {
 };
 
 export default RegisterScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
