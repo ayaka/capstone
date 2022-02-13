@@ -7,7 +7,6 @@ import { db } from "../firebase";
 import { doc, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 
 import CustomSwitch from "../components/CustomSwitch";
-import globalStyles from "../globalStyles";
 import globalColors from "../globalColors";
 
 const LocationScreen = () => {
@@ -16,6 +15,7 @@ const LocationScreen = () => {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const docRef = doc(db, "pets", route.params.petId);
+  const userName = route.params.userName;
 
   useEffect(() => {
     const unsubscribe = onSnapshot(docRef, (doc) => {
@@ -33,17 +33,22 @@ const LocationScreen = () => {
 
   const toggleAmWalk = async () => {
     status.am[0]
-      ? await updateDoc(docRef, { "walk.am": [false, null] })
-      : await updateDoc(docRef, { "walk.am": [true, Timestamp.now()] });
+      ? await updateDoc(docRef, { "walk.am": [false, null, null] })
+      : await updateDoc(docRef, {
+          "walk.am": [true, Timestamp.now()],
+          userName,
+        });
   };
   const togglePmWalk = async () => {
     status.pm[0]
-      ? await updateDoc(docRef, { "walk.pm": [false, null] })
-      : await updateDoc(docRef, { "walk.pm": [true, Timestamp.now()] });
+      ? await updateDoc(docRef, { "walk.pm": [false, null, null] })
+      : await updateDoc(docRef, {
+          "walk.pm": [true, Timestamp.now(), userName],
+        });
   };
 
   return (
-    <SafeAreaView style={globalStyles.container}>
+    <SafeAreaView style={styles.container}>
       {loading ? (
         <Text>Loading...</Text>
       ) : (
@@ -67,7 +72,7 @@ const LocationScreen = () => {
             title="AM walk"
             text={
               status.am[1]
-                ? `Went out for a walk at ${status.am[1]
+                ? `Walked with ${userName} at ${status.am[1]
                     .toDate()
                     .toLocaleTimeString()}`
                 : "Hasn't been walked this morning"
@@ -80,7 +85,7 @@ const LocationScreen = () => {
             title="PM walk"
             text={
               status.pm[1]
-                ? `Went out for a walk at ${status.pm[1]
+                ? `Walked with ${userName} at ${status.pm[1]
                     .toDate()
                     .toLocaleTimeString()}`
                 : "Hasn't been walked this morning"
@@ -95,6 +100,12 @@ const LocationScreen = () => {
 export default LocationScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: globalColors.lightBlue,
+  },
   sectionContainer: {
     height: "70%",
     justifyContent: "space-evenly",

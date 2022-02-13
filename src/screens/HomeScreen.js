@@ -107,20 +107,13 @@ const HomeScreen = () => {
   };
 
   const getWeatherInfo = (data) => {
-    // const {
-    //   current: {
-    //     temp,
-    //     weather: [{ icon, description }],
-    //   },
-    // } = data;
-
     const {
       temp: kelvin,
       weather: [{ icon, description }],
     } = data;
 
     const iconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`;
-    // kelvin to fahrenheit
+    // convert to fahrenheit
     const temp = Math.round(((kelvin - 273.15) * 9) / 5 + 32);
 
     return { temp, iconUrl, description };
@@ -156,7 +149,7 @@ const HomeScreen = () => {
 
     return (
       <View style={styles.weatherForecast}>
-        <Text style={[styles.text, { fontSize: 11, marginRight: 10 }]}>
+        <Text style={[styles.text, { fontSize: 12, marginRight: 10 }]}>
           Next
         </Text>
         <FlatList
@@ -165,14 +158,14 @@ const HomeScreen = () => {
           horizontal={true}
           renderItem={({ item }) => (
             <View style={styles.weatherForecastHour}>
-              <Text style={[styles.text, { fontSize: 11 }]}>
+              <Text style={[styles.text, { fontSize: 12 }]}>
                 {item.hour + 1}h
               </Text>
               <Image
                 style={{ width: 25, height: 25 }}
                 source={{ uri: item.iconUrl }}
               />
-              <Text style={[styles.text, { fontSize: 11 }]}>{item.temp}°</Text>
+              <Text style={[styles.text, { fontSize: 12 }]}>{item.temp}°</Text>
             </View>
           )}
         />
@@ -182,7 +175,7 @@ const HomeScreen = () => {
 
   return loading ? (
     <SafeAreaView style={styles.container}>
-      <Text>Loading...</Text>
+      <ActivityIndicator animating={true} color={globalColors.blue} />
     </SafeAreaView>
   ) : (
     <SafeAreaView style={styles.container}>
@@ -210,7 +203,7 @@ const HomeScreen = () => {
                   <IconButton
                     icon="camera"
                     color={globalColors.rose}
-                    size={30}
+                    size={35}
                     onPress={() =>
                       navigation.navigate("ImageCapture", { petId: pet.id })
                     }
@@ -234,19 +227,32 @@ const HomeScreen = () => {
         <View style={styles.iconSectionContainer}>
           <View style={styles.iconContainer}>
             <CustomIcon
-              onPress={() => navigation.navigate("Food", { petId: pet.id })}
-              text1="Meals &"
-              text2="Snacks"
+              onPress={() =>
+                navigation.navigate("Food", {
+                  petId: pet.id,
+                  userName: user.username,
+                })
+              }
+              image={
+                <Image
+                  source={require("../assets/pet-bowl.png")}
+                  style={{ width: "50%", height: "50%", resizeMode: "contain" }}
+                />
+              }
             />
             <CustomIcon
               onPress={() =>
                 navigation.navigate({
                   name: "Location",
-                  params: { petId: pet.id },
+                  params: { petId: pet.id, userName: user.username },
                 })
               }
-              text1="Inside /"
-              text2="Outside"
+              image={
+                <Image
+                  source={require("../assets/wait.png")}
+                  style={{ width: "50%", height: "50%", resizeMode: "contain" }}
+                />
+              }
             />
           </View>
         </View>
@@ -260,13 +266,14 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   cameraIcon: {
     position: "absolute",
-    top: -10,
-    right: -10,
+    top: -13,
+    right: -13,
   },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: globalColors.honeydew,
   },
   iconContainer: {
     flex: 1,
@@ -294,7 +301,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: "100%",
-    paddingVertical: "7%",
+    paddingVertical: "10%",
     paddingHorizontal: "10%",
     justifyContent: "space-between",
   },
@@ -303,7 +310,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: globalColors.white,
     position: "absolute",
-    top: "2.5%",
+    top: "2%",
   },
   petContainer: {
     flex: 1,
@@ -311,6 +318,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: globalColors.black,
+    shadowColor: globalColors.black,
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 5,
   },
   petSectionContainer: {
     flex: 3,
@@ -350,7 +361,7 @@ const styles = StyleSheet.create({
   },
   weatherForecastHour: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: 13,
     alignItems: "center",
   },
   weatherSectionContainer: {
@@ -358,7 +369,11 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: globalColors.yellow,
+    backgroundColor: globalColors.lightBlue,
     paddingHorizontal: 20,
+    shadowColor: globalColors.black,
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 5,
   },
 });

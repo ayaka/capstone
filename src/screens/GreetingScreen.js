@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import CustomButton from "../components/CustomButton";
 import globalStyles from "../globalStyles";
 import globalColors from "../globalColors";
+import { ActivityIndicator, IconButton } from "react-native-paper";
 
 LogBox.ignoreLogs([
   "AsyncStorage has been extracted from react-native core and will be removed in a future release",
@@ -21,13 +22,11 @@ const GreetingScreen = () => {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  let userDocRef;
-  let petDocRef;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        userDocRef = doc(db, "users", currentUser.uid);
+        const userDocRef = doc(db, "users", currentUser.uid);
         getDoc(userDocRef)
           .then((userDocSnap) => {
             if (userDocSnap.exists()) {
@@ -36,7 +35,7 @@ const GreetingScreen = () => {
             setLoading(false);
           })
           .catch((error) => {
-            console.log(error.message);
+            alert(error.message);
           });
       } else {
         setLoading(false);
@@ -47,14 +46,9 @@ const GreetingScreen = () => {
 
   const directHome = async () => {
     try {
-      petDocRef = doc(db, "pets", user.petId);
-      const petDocSnap = await getDoc(petDocRef);
-      if (petDocSnap.exists()) {
+      if (user) {
         navigation.replace("Home", {
-          // pet: petDocSnap.data(),
-          // petDocRef: petDocRef,
           user: user,
-          // user: userDocRef,
         });
       } else {
         throw {
@@ -67,40 +61,35 @@ const GreetingScreen = () => {
   };
 
   const directLogin = async () => {
-    // await signOut(auth);
     navigation.navigate("Login");
   };
 
   const directRegister = async () => {
-    // await signOut(auth);
     navigation.navigate("Register");
   };
 
   const Greeting = () => {
     if (loading) {
-      return <Text style={styles.text}>Loading...</Text>;
+      return <ActivityIndicator animating={true} color={globalColors.blue} />;
     } else if (user) {
       return (
         <View style={styles.greeting}>
           <Text style={[styles.text, styles.title]}>
             Welcome Back{"\n" + user.username}
           </Text>
-          <Pressable
-            onPress={directHome}
-            style={({ pressed }) => [
-              { opacity: pressed ? 0.5 : 1.0 },
-              styles.icon,
-            ]}
-          >
-            <Text style={[styles.text, styles.iconText]}>
-              Go to{"\n"}Main Page
-            </Text>
-          </Pressable>
+          <View style={styles.icon}>
+            <IconButton
+              icon="paw"
+              color={globalColors.white}
+              size={100}
+              onPress={directHome}
+            />
+          </View>
           <Text style={styles.text}>Not {user.username}?</Text>
         </View>
       );
     } else {
-      return <Text style={styles.title}>Welcome</Text>;
+      return <Text style={[styles.text, styles.title]}>Welcome</Text>;
     }
   };
 
@@ -154,18 +143,16 @@ const styles = StyleSheet.create({
     height: 130,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: globalColors.lightGreen,
+    backgroundColor: globalColors.green,
+    // backgroundColor: "#053225",
     borderRadius: 65,
   },
-  iconText: {
-    textAlign: "center",
-    fontWeight: "700",
-  },
   text: {
-    color: globalColors.olive,
+    color: globalColors.brown,
   },
   title: {
     textAlign: "center",
     fontSize: 25,
+    fontWeight: "700",
   },
 });

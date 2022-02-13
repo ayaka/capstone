@@ -14,6 +14,8 @@ import CustomButton from "../components/CustomButton";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
+import globalColors from "../globalColors";
+
 const Login = () => {
   const navigation = useNavigation();
 
@@ -54,6 +56,8 @@ const Login = () => {
         style={globalStyles.input}
         placeholder="Email"
         value={email}
+        autoCapitalize="none"
+        selectionColor={globalColors.blue}
       />
       <TextInput
         onChangeText={(value) => setPassword(value)}
@@ -61,6 +65,7 @@ const Login = () => {
         placeholder="Password"
         value={password}
         secureTextEntry
+        selectionColor={globalColors.blue}
       />
       <CustomButton
         onPress={handleLogin}
