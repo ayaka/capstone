@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import React from "react";
 
 import globalColors from "../globalColors";
@@ -7,10 +7,17 @@ const CustomIcon = (props) => {
   return (
     <Pressable
       onPress={props.onPress}
-      style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }, styles.icon]}
+      style={({ pressed }) => [
+        { opacity: pressed ? 0.5 : 1.0 },
+        { shadowColor: globalColors.black },
+        { shadowOpacity: pressed ? 0 : 0.5 },
+        { shadowOffset: { width: 0, height: 5 } },
+        { shadowRadius: 5 },
+        { elevation: pressed ? 0 : 10 },
+        styles.icon,
+      ]}
     >
-      <Text style={styles.text}>{props.text1}</Text>
-      <Text style={styles.text}>{props.text2}</Text>
+      {props.image}
     </Pressable>
   );
 };
@@ -23,12 +30,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: globalColors.blue,
-  },
-  text: {
-    color: globalColors.black,
-    fontSize: 16,
-    fontWeight: "700",
-    textAlign: "center",
+    backgroundColor: globalColors.lightBlue,
+    borderColor: "gray",
   },
 });

@@ -41,6 +41,7 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     margin: 10,
+    color: globalColors.brown,
   },
   statusContainer: {
     flex: 1,

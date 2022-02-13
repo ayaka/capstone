@@ -3,6 +3,7 @@ import React from "react";
 import { Switch } from "react-native-paper";
 
 import globalStyles from "../globalStyles";
+import globalColors from "../globalColors";
 
 const CustomSwitch = (props) => {
   return (
@@ -12,6 +13,7 @@ const CustomSwitch = (props) => {
         style={styles.switch}
         value={props.value}
         onValueChange={props.onValueChange}
+        color={globalColors.brown}
       />
       <Text style={styles.text}>{props.text}</Text>
     </View>
@@ -21,10 +23,15 @@ const CustomSwitch = (props) => {
 export default CustomSwitch;
 
 const styles = StyleSheet.create({
-  switch: { margin: 10 },
-
+  switch: {
+    margin: 10,
+  },
+  text: {
+    color: globalColors.brown,
+  },
   title: {
     fontSize: 16,
     fontWeight: "700",
+    color: globalColors.brown,
   },
 });

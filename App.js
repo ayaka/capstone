@@ -1,7 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 
 import LoginScreen from "./src/screens/LoginScreen";
@@ -10,9 +9,9 @@ import RegisterScreen from "./src/screens/RegisterScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import LocationScreen from "./src/screens/LocationScreen";
 import ImageCaptureScreen from "./src/screens/ImageCaptureScreen";
-
 import FoodScreen from "./src/screens/FoodScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import globalColors from "./src/globalColors";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,20 +29,58 @@ export default function App() {
             <Stack.Screen
               name="Login"
               component={LoginScreen}
-              // options={{ headerShown: false }}
+              options={{
+                title: "Log In",
+                headerTintColor: globalColors.brown,
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}
             />
             <Stack.Screen
               name="Register"
               component={RegisterScreen}
-              // options={{ headerShown: false }}
+              options={{
+                title: "Register",
+                headerTintColor: globalColors.brown,
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}
             />
             <Stack.Screen
               name="Home"
               component={HomeScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="Food" component={FoodScreen} />
-            <Stack.Screen name="Location" component={LocationScreen} />
+            <Stack.Screen
+              name="Food"
+              component={FoodScreen}
+              options={{
+                title: "Food / Snack Status",
+                headerStyle: {
+                  backgroundColor: globalColors.white,
+                },
+                headerTintColor: globalColors.brown,
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="Location"
+              component={LocationScreen}
+              options={{
+                title: "Backyard / Walk Status",
+                headerStyle: {
+                  backgroundColor: globalColors.white,
+                },
+                headerTintColor: globalColors.brown,
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}
+            />
             <Stack.Screen name="ImageCapture" component={ImageCaptureScreen} />
           </Stack.Navigator>
         </NavigationContainer>

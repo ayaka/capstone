@@ -6,12 +6,13 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
 import { collection, deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { auth } from "../firebase";
 import { db } from "../firebase";
 import CustomButton from "../components/CustomButton";
 import globalStyles from "../globalStyles";
+import globalColors from "../globalColors";
 import { useNavigation } from "@react-navigation/native";
 
 const RegisterScreen = () => {
@@ -39,10 +40,10 @@ const RegisterScreen = () => {
           user: userDocSnap.data(),
         });
       } catch (error) {
-        // erase user and pet data if created in firestore
+        // erase data from firebase auth/firestore if created
         if (petDocRef) await deleteDoc(doc(db, "pets", petDocRef.id));
         if (userDocRef) await deleteDoc(doc(db, "users", userDocRef.id));
-
+        await deleteUser(auth.currentUser);
         alert(error.message);
       }
     } catch (error) {
@@ -61,7 +62,7 @@ const RegisterScreen = () => {
 
   const getPetDocRef = async () => {
     if ((!petName && !petId) || (petName && petId)) {
-      throw { message: "Please enter id or name for your pet" };
+      throw { message: "Please enter either id or name  your pet" };
     } else if (petName) {
       // register new pet
       const docRef = doc(collection(db, "pets"));
@@ -69,15 +70,15 @@ const RegisterScreen = () => {
         id: docRef.id,
         name: petName,
         food: {
-          leftover: [null, null],
-          breakfast: [false, null],
-          dinner: [false, null],
-          treat: [false, null],
+          leftover: [null, null, null],
+          breakfast: [false, null, null],
+          dinner: [false, null, null],
+          treat: [false, null, null],
           extraTreats: 0,
         },
         walk: {
-          am: [false, null],
-          pm: [false, null],
+          am: [false, null, null],
+          pm: [false, null, null],
         },
         outside: [false, null],
       });
@@ -127,12 +128,15 @@ const RegisterScreen = () => {
         style={globalStyles.input}
         placeholder="Username"
         value={username}
+        selectionColor={globalColors.blue}
       />
       <TextInput
         onChangeText={(value) => setEmail(value)}
         style={globalStyles.input}
         placeholder="Email"
         value={email}
+        autoCapitalize="none"
+        selectionColor={globalColors.blue}
       />
       <TextInput
         onChangeText={(value) => setPassword(value)}
@@ -140,6 +144,7 @@ const RegisterScreen = () => {
         placeholder="Password"
         value={password}
         secureTextEntry
+        selectionColor={globalColors.blue}
       />
       <TextInput
         onChangeText={(value) => setPasswordConf(value)}
@@ -147,20 +152,21 @@ const RegisterScreen = () => {
         placeholder="Confirm Password"
         value={passwordConf}
         secureTextEntry
+        selectionColor={globalColors.blue}
       />
       <TextInput
-        // TODO: disable petName input if petId is not empty
         onChangeText={(value) => setPetId(value)}
         style={globalStyles.input}
         placeholder="Pet ID if your pet is already registered"
         value={petId}
+        selectionColor={globalColors.blue}
       />
       <TextInput
-        // TODO: disable petID input if petName is not empty
         onChangeText={(value) => setPetName(value)}
         style={globalStyles.input}
         placeholder="Pet name to register your pet"
         value={petName}
+        selectionColor={globalColors.blue}
       />
       <CustomButton
         onPress={handleRegister}

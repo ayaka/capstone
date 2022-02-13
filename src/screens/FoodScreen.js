@@ -18,6 +18,7 @@ const FoodScreen = () => {
   const [food, setFood] = useState(null);
   const [loading, setLoading] = useState(true);
   const docRef = doc(db, "pets", route.params.petId);
+  const userName = route.params.userName;
 
   useEffect(() => {
     const unsubscribe = onSnapshot(docRef, (doc) => {
@@ -29,26 +30,32 @@ const FoodScreen = () => {
 
   const checkLeftover = async () => {
     await updateDoc(docRef, {
-      "food.leftover": [!food.leftover[0], Timestamp.now()],
+      "food.leftover": [!food.leftover[0], Timestamp.now(), userName],
     });
   };
 
   const toggleBreakfast = async () => {
     food.breakfast[0]
-      ? await updateDoc(docRef, { "food.breakfast": [false, null] })
-      : await updateDoc(docRef, { "food.breakfast": [true, Timestamp.now()] });
+      ? await updateDoc(docRef, { "food.breakfast": [false, null, null] })
+      : await updateDoc(docRef, {
+          "food.breakfast": [true, Timestamp.now(), userName],
+        });
   };
 
   const toggleDinner = async () => {
     food.dinner[0]
-      ? await updateDoc(docRef, { "food.dinner": [false, null] })
-      : await updateDoc(docRef, { "food.dinner": [true, Timestamp.now()] });
+      ? await updateDoc(docRef, { "food.dinner": [false, null, null] })
+      : await updateDoc(docRef, {
+          "food.dinner": [true, Timestamp.now(), userName],
+        });
   };
 
   const toggleTreat = async () => {
     food.treat[0]
-      ? await updateDoc(docRef, { "food.treat": [false, null] })
-      : await updateDoc(docRef, { "food.treat": [true, Timestamp.now()] });
+      ? await updateDoc(docRef, { "food.treat": [false, null, null] })
+      : await updateDoc(docRef, {
+          "food.treat": [true, Timestamp.now(), userName],
+        });
   };
 
   const addTreatCounts = async () => {
@@ -64,20 +71,22 @@ const FoodScreen = () => {
           <View style={globalStyles.statusContainer}>
             <Text style={styles.title}>Leftover</Text>
             <View style={styles.radioButtonContainer}>
-              <Text>No</Text>
+              <Text style={styles.text}>No</Text>
               <RadioButton
                 value="No"
+                color={globalColors.brown}
                 status={food.leftover[0] === false ? "checked" : "unchecked"}
                 onPress={() => checkLeftover(true)}
               />
-              <Text>Yes</Text>
+              <Text style={styles.text}>Yes</Text>
               <RadioButton
                 value="Yes"
+                color={globalColors.brown}
                 status={food.leftover[0] === true ? "checked" : "unchecked"}
                 onPress={() => checkLeftover(false)}
               />
             </View>
-            <Text>
+            <Text style={styles.text}>
               {food.leftover[1] === null
                 ? "Not checked yet"
                 : `Checked at ${food.leftover[1]
@@ -92,7 +101,9 @@ const FoodScreen = () => {
             title="Breakfast"
             text={
               food.breakfast[1]
-                ? `Given at ${food.breakfast[1].toDate().toLocaleTimeString()}`
+                ? `Given by ${food.breakfast[2]} at ${food.breakfast[1]
+                    .toDate()
+                    .toLocaleTimeString()}`
                 : "Not given yet"
             }
           />
@@ -103,7 +114,9 @@ const FoodScreen = () => {
             title="Dinner"
             text={
               food.dinner[1]
-                ? `Given at ${food.dinner[1].toDate().toLocaleTimeString()}`
+                ? `Given by ${food.dinner[2]} at ${food.dinner[1]
+                    .toDate()
+                    .toLocaleTimeString()}`
                 : "Not given yet"
             }
           />
@@ -114,7 +127,9 @@ const FoodScreen = () => {
             title="Treat"
             text={
               food.treat[1]
-                ? `Given at ${food.treat[1].toDate().toLocaleTimeString()}`
+                ? `Given by ${food.treat[2]} at ${food.treat[1]
+                    .toDate()
+                    .toLocaleTimeString()}`
                 : "Not given yet"
             }
           />
@@ -128,7 +143,7 @@ const FoodScreen = () => {
               <IconButton
                 icon="plus"
                 style={styles.icon}
-                color={globalColors.green}
+                color={globalColors.brown}
                 size={30}
                 onPress={addTreatCounts}
               />
@@ -147,6 +162,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: globalColors.lightBlue,
   },
   radioButtonContainer: {
     flexDirection: "row",
@@ -159,10 +175,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
   },
+  text: {
+    color: globalColors.brown,
+  },
   title: {
     fontSize: 16,
     fontWeight: "700",
     textAlign: "center",
+    color: globalColors.brown,
   },
   treatCount: {
     fontSize: 20,
