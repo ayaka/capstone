@@ -43,8 +43,11 @@ const RegisterScreen = () => {
         await getPetDocRef();
         await getUserDocRef(petDocRef.id);
         const userDocSnap = await getDocSnap(userDocRef);
-        navigation.replace("Home", {
-          user: userDocSnap.data(),
+        navigation.replace("Main", {
+          screen: "Home",
+          params: {
+            user: userDocSnap.data(),
+          },
         });
       } catch (error) {
         // erase data from firebase auth/firestore if created

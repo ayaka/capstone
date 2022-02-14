@@ -28,8 +28,11 @@ const Login = () => {
       const userDocRef = doc(db, "users", cred.user.uid);
       const userDocSnap = await getDocSnap(userDocRef);
 
-      navigation.replace("Home", {
-        user: userDocSnap.data(),
+      navigation.replace("Main", {
+        screen: "Home",
+        params: {
+          user: userDocSnap.data(),
+        },
       });
     } catch (error) {
       Alert.alert("Error", error.message);

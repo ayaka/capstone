@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
@@ -41,14 +41,18 @@ const GreetingScreen = () => {
         setLoading(false);
       }
     });
+    console.log("called");
     return unsubscribe;
   }, []);
 
   const directHome = async () => {
     try {
       if (user) {
-        navigation.replace("Home", {
-          user: user,
+        navigation.replace("Main", {
+          screen: "Home",
+          params: {
+            user: user,
+          },
         });
       } else {
         throw {

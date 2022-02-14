@@ -19,11 +19,19 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import ProfileScreen from "./src/screens/ProfileScreen";
 const Drawer = createDrawerNavigator();
 
-const Main = (props) => {
+const DrawerRoutes = () => {
   return (
     <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
     </Drawer.Navigator>
   );
 };
@@ -62,14 +70,10 @@ export default function App() {
               }}
             />
             <Stack.Screen
-              name="Home"
-              component={HomeScreen}
+              name="Main"
+              component={DrawerRoutes}
               options={{ headerShown: false }}
             />
-            {/* <Drawer.Navigator initialRouteName="Home">
-              <Drawer.Screen name="Home" component={HomeScreen} />
-              <Drawer.Screen name="Profile" component={ProfileScreen} />
-            </Drawer.Navigator> */}
             <Stack.Screen
               name="Food"
               component={FoodScreen}
