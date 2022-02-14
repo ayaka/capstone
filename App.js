@@ -15,6 +15,19 @@ import globalColors from "./src/globalColors";
 
 const Stack = createNativeStackNavigator();
 
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import ProfileScreen from "./src/screens/ProfileScreen";
+const Drawer = createDrawerNavigator();
+
+const Main = (props) => {
+  return (
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+    </Drawer.Navigator>
+  );
+};
+
 export default function App() {
   return (
     <PaperProvider>
@@ -53,6 +66,10 @@ export default function App() {
               component={HomeScreen}
               options={{ headerShown: false }}
             />
+            {/* <Drawer.Navigator initialRouteName="Home">
+              <Drawer.Screen name="Home" component={HomeScreen} />
+              <Drawer.Screen name="Profile" component={ProfileScreen} />
+            </Drawer.Navigator> */}
             <Stack.Screen
               name="Food"
               component={FoodScreen}

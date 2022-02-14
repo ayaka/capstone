@@ -13,9 +13,13 @@ import { doc, onSnapshot, setDoc, Timestamp } from "firebase/firestore";
 import * as Location from "expo-location";
 import globalStyles from "../globalStyles";
 import { ActivityIndicator } from "react-native-paper";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
+import ProfileScreen from "./ProfileScreen";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const Drawer = createDrawerNavigator();
 
   const route = useRoute();
   const user = route.params.user;
@@ -178,86 +182,103 @@ const HomeScreen = () => {
       <ActivityIndicator animating={true} color={globalColors.blue} />
     </SafeAreaView>
   ) : (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.mainContainer}>
-        <View style={styles.weatherSectionContainer}>
-          {weatherData ? (
-            <View style={styles.weatherContainer}>
-              <CurrentWeather />
-              <WeatherForecast />
-            </View>
-          ) : errorMessage ? (
-            <Text style={styles.text}>{errorMessage}</Text>
-          ) : (
-            <ActivityIndicator animating={true} color={globalColors.blue} />
-          )}
-        </View>
+    <>
+      <Drawer.Navigator>
+        {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
+        <Drawer.Screen name="Profile" component={ProfileScreen} />
+      </Drawer.Navigator>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.mainContainer}>
+          <View style={styles.weatherSectionContainer}>
+            {weatherData ? (
+              <View style={styles.weatherContainer}>
+                <CurrentWeather />
+                <WeatherForecast />
+              </View>
+            ) : errorMessage ? (
+              <Text style={styles.text}>{errorMessage}</Text>
+            ) : (
+              <ActivityIndicator animating={true} color={globalColors.blue} />
+            )}
+          </View>
 
-        <View style={styles.petSectionContainer}>
-          <View style={styles.petContainer}>
-            <Text style={styles.name}>{pet.name}</Text>
-            <View style={styles.imageContainer}>
-              {pet.imageUrl ? (
-                <>
-                  <Image style={styles.image} source={{ uri: pet.imageUrl }} />
+          <View style={styles.petSectionContainer}>
+            <View style={styles.petContainer}>
+              <Text style={styles.name}>{pet.name}</Text>
+              <View style={styles.imageContainer}>
+                {pet.imageUrl ? (
+                  <>
+                    <Image
+                      style={styles.image}
+                      source={{ uri: pet.imageUrl }}
+                    />
+                    <IconButton
+                      icon="camera"
+                      color={globalColors.rose}
+                      size={35}
+                      onPress={() =>
+                        navigation.navigate("ImageCapture", { petId: pet.id })
+                      }
+                      style={styles.cameraIcon}
+                    />
+                  </>
+                ) : (
                   <IconButton
                     icon="camera"
                     color={globalColors.rose}
-                    size={35}
+                    size={60}
                     onPress={() =>
                       navigation.navigate("ImageCapture", { petId: pet.id })
                     }
-                    style={styles.cameraIcon}
                   />
-                </>
-              ) : (
-                <IconButton
-                  icon="camera"
-                  color={globalColors.rose}
-                  size={60}
-                  onPress={() =>
-                    navigation.navigate("ImageCapture", { petId: pet.id })
-                  }
-                />
-              )}
+                )}
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.iconSectionContainer}>
+            <View style={styles.iconContainer}>
+              <CustomIcon
+                onPress={() =>
+                  navigation.navigate("Food", {
+                    petId: pet.id,
+                    userName: user.username,
+                  })
+                }
+                image={
+                  <Image
+                    source={require("../assets/pet-bowl.png")}
+                    style={{
+                      width: "50%",
+                      height: "50%",
+                      resizeMode: "contain",
+                    }}
+                  />
+                }
+              />
+              <CustomIcon
+                onPress={() =>
+                  navigation.navigate({
+                    name: "Location",
+                    params: { petId: pet.id, userName: user.username },
+                  })
+                }
+                image={
+                  <Image
+                    source={require("../assets/wait.png")}
+                    style={{
+                      width: "50%",
+                      height: "50%",
+                      resizeMode: "contain",
+                    }}
+                  />
+                }
+              />
             </View>
           </View>
         </View>
-
-        <View style={styles.iconSectionContainer}>
-          <View style={styles.iconContainer}>
-            <CustomIcon
-              onPress={() =>
-                navigation.navigate("Food", {
-                  petId: pet.id,
-                  userName: user.username,
-                })
-              }
-              image={
-                <Image
-                  source={require("../assets/pet-bowl.png")}
-                  style={{ width: "50%", height: "50%", resizeMode: "contain" }}
-                />
-              }
-            />
-            <CustomIcon
-              onPress={() =>
-                navigation.navigate({
-                  name: "Location",
-                  params: { petId: pet.id, userName: user.username },
-                })
-              }
-              image={
-                <Image
-                  source={require("../assets/wait.png")}
-                  style={{ width: "50%", height: "50%", resizeMode: "contain" }}
-                />
-              }
-            />
-          </View>
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 };
 
