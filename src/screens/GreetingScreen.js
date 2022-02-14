@@ -41,7 +41,6 @@ const GreetingScreen = () => {
         setLoading(false);
       }
     });
-    console.log("called");
     return unsubscribe;
   }, []);
 
