@@ -204,7 +204,7 @@ const HomeScreen = () => {
                     color={globalColors.rose}
                     size={35}
                     onPress={() =>
-                      navigation.navigate("ImageCapture", { petId: pet.id })
+                      navigation.navigate("Camera", { petId: pet.id })
                     }
                     style={styles.cameraIcon}
                   />
@@ -215,7 +215,7 @@ const HomeScreen = () => {
                   color={globalColors.rose}
                   size={60}
                   onPress={() =>
-                    navigation.navigate("ImageCapture", { petId: pet.id })
+                    navigation.navigate("Camera", { petId: pet.id })
                   }
                 />
               )}

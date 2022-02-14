@@ -9,6 +9,7 @@ import RegisterScreen from "./src/screens/RegisterScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import LocationScreen from "./src/screens/LocationScreen";
 import ImageCaptureScreen from "./src/screens/ImageCaptureScreen";
+import CameraScreen from "./src/screens/CameraScreen";
 import FoodScreen from "./src/screens/FoodScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import globalColors from "./src/globalColors";
@@ -102,6 +103,7 @@ export default function App() {
                 },
               }}
             />
+            <Stack.Screen name="Camera" component={CameraScreen} />
             <Stack.Screen name="ImageCapture" component={ImageCaptureScreen} />
           </Stack.Navigator>
         </NavigationContainer>
