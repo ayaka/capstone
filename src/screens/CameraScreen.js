@@ -79,11 +79,16 @@ const CameraScreen = () => {
   }
   return (
     <View style={styles.container}>
-      <View styles={styles.topSpace}>
+      <View style={styles.topSpace}>
         {imageUri && (
-          <Pressable style={styles.imageContainer} onPress={saveImage}>
-            <Image source={{ uri: imageUri }} style={styles.image} />
-          </Pressable>
+          <View style={styles.imageSectionContainer}>
+            <Pressable style={styles.imageContainer} onPress={saveImage}>
+              <View style={styles.saveIcon}>
+                <Ionicons name="save" color={globalColors.blue} size={30} />
+              </View>
+              <Image source={{ uri: imageUri }} style={styles.image} />
+            </Pressable>
+          </View>
         )}
       </View>
       <Camera
@@ -95,7 +100,6 @@ const CameraScreen = () => {
 
       <View style={styles.iconSectionContainer}>
         <Pressable
-          // style={[styles.iconContainer, styles.albumIcon]}
           onPress={() =>
             navigation.navigate("ImageCapture", {
               petId: route.params.petId,
@@ -104,10 +108,7 @@ const CameraScreen = () => {
         >
           <Ionicons name="albums" color="#fff" size={45} />
         </Pressable>
-        <Pressable
-          // style={[styles.iconContainer, styles.buttonIcon]}
-          onPress={takePhoto}
-        >
+        <Pressable onPress={takePhoto}>
           <Ionicons
             name="radio-button-on"
             color={globalColors.rose}
@@ -150,22 +151,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    // padding: "2%",
     backgroundColor: "#000",
   },
   image: {
+    height: "100%",
     width: "100%",
-    aspectRatio: 1,
+    borderRadius: 10,
   },
   imageContainer: {
-    // position: "absolute",
-    // top: "2%",
-    // left: "4%",
-    height: 80,
-    width: 80,
+    height: "80%",
+    aspectRatio: 1,
     borderWidth: 2,
     borderColor: "#fff",
-    borderRadius: 5,
+    borderRadius: 10,
+  },
+  imageSectionContainer: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  saveIcon: {
+    position: "absolute",
+    top: "-10%",
+    right: "-10%",
     zIndex: 5,
   },
   topSpace: {

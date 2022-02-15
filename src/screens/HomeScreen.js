@@ -16,6 +16,7 @@ import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+
   const route = useRoute();
   const user = route.params.user;
   const [pet, setPet] = useState(null);
@@ -235,11 +236,7 @@ const HomeScreen = () => {
               image={
                 <Image
                   source={require("../assets/pet-bowl.png")}
-                  style={{
-                    width: "50%",
-                    height: "50%",
-                    resizeMode: "contain",
-                  }}
+                  style={{ width: "50%", height: "50%", resizeMode: "contain" }}
                 />
               }
             />
@@ -253,11 +250,7 @@ const HomeScreen = () => {
               image={
                 <Image
                   source={require("../assets/wait.png")}
-                  style={{
-                    width: "50%",
-                    height: "50%",
-                    resizeMode: "contain",
-                  }}
+                  style={{ width: "50%", height: "50%", resizeMode: "contain" }}
                 />
               }
             />
