@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "capstone",
-    "slug": "capstone",
+    "name": "Who Let The Dog Out",
+    "slug": "who-let-the-dog-out",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
@@ -41,6 +41,7 @@
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
-    }
+    },
+    "description": "Communication tool among registered users to keep track of daily status of your precious dog."
   }
 }

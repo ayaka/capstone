@@ -75,7 +75,7 @@ const LocationScreen = () => {
                 ? `Walked with ${userName} at ${status.am[1]
                     .toDate()
                     .toLocaleTimeString()}`
-                : "Hasn't been walked this morning"
+                : "Hasn't been walked this morning yet"
             }
           />
 
@@ -88,7 +88,7 @@ const LocationScreen = () => {
                 ? `Walked with ${userName} at ${status.pm[1]
                     .toDate()
                     .toLocaleTimeString()}`
-                : "Hasn't been walked this morning"
+                : "Hasn't been walked this evening yet"
             }
           />
         </View>
