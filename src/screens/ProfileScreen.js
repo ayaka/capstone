@@ -60,7 +60,9 @@ const ProfileScreen = () => {
             <Text style={styles.text}>Some Profile Info</Text>
             <Text style={styles.text}>Some Profile Info</Text>
             <Text style={styles.text}>Some Profile Info</Text>
-            <Text style={styles.text}>Pet ID: {user.petId}</Text>
+            <Text style={styles.text} selectable>
+              Pet ID: {user.petId}
+            </Text>
           </View>
           <View style={globalStyles.container}>
             <CustomButton

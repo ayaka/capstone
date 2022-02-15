@@ -46,7 +46,7 @@ const ImageCaptureScreen = () => {
         const docRef = doc(db, "pets", route.params.petId);
         updateDoc(docRef, {
           imageUrl: url,
-        }).then(() => navigation.popToTop());
+        }).then(() => navigation.goBack());
       } catch (error) {
         Alert.alert(error.message);
         setUploading(false);

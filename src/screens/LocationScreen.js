@@ -27,15 +27,15 @@ const LocationScreen = () => {
 
   const toggleBackyard = async () => {
     status.outside[0]
-      ? await updateDoc(docRef, { outside: [false, null] })
-      : await updateDoc(docRef, { outside: [true, Timestamp.now()] });
+      ? await updateDoc(docRef, { outside: [false, null, null] })
+      : await updateDoc(docRef, { outside: [true, Timestamp.now(), userName] });
   };
 
   const toggleAmWalk = async () => {
     status.am[0]
       ? await updateDoc(docRef, { "walk.am": [false, null, null] })
       : await updateDoc(docRef, {
-          "walk.am": [true, Timestamp.now()],
+          "walk.am": [true, Timestamp.now(), userName],
           userName,
         });
   };
@@ -59,7 +59,7 @@ const LocationScreen = () => {
             title="Backyard"
             text={
               status.outside[1]
-                ? `In the backyard since ${status.outside[1]
+                ? `${status.outside[2]} let the dog out ${status.outside[1]
                     .toDate()
                     .toLocaleTimeString()}`
                 : "Not in the backyard"
@@ -72,7 +72,7 @@ const LocationScreen = () => {
             title="AM walk"
             text={
               status.am[1]
-                ? `Walked with ${userName} at ${status.am[1]
+                ? `Walked with ${status.am[2]} at ${status.am[1]
                     .toDate()
                     .toLocaleTimeString()}`
                 : "Hasn't been walked this morning yet"
@@ -85,7 +85,7 @@ const LocationScreen = () => {
             title="PM walk"
             text={
               status.pm[1]
-                ? `Walked with ${userName} at ${status.pm[1]
+                ? `Walked with ${status.pm[2]} at ${status.pm[1]
                     .toDate()
                     .toLocaleTimeString()}`
                 : "Hasn't been walked this evening yet"

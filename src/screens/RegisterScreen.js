@@ -98,7 +98,7 @@ const RegisterScreen = () => {
       if (!docSnap.exists()) {
         throw { message: "Invalid pet id" };
       }
-      return docRef;
+      petDocRef = docRef;
     }
   };
 

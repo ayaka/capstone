@@ -26,9 +26,9 @@ const FoodScreen = () => {
     return () => unsubscribe();
   }, []);
 
-  const checkLeftover = async () => {
+  const checkLeftover = async (value) => {
     await updateDoc(docRef, {
-      "food.leftover": [!food.leftover[0], Timestamp.now(), userName],
+      "food.leftover": [value, Timestamp.now(), userName],
     });
   };
 
@@ -74,14 +74,14 @@ const FoodScreen = () => {
                 value="No"
                 color={globalColors.brown}
                 status={food.leftover[0] === false ? "checked" : "unchecked"}
-                onPress={() => checkLeftover(true)}
+                onPress={() => checkLeftover(false)}
               />
               <Text style={styles.text}>Yes</Text>
               <RadioButton
                 value="Yes"
                 color={globalColors.brown}
                 status={food.leftover[0] === true ? "checked" : "unchecked"}
-                onPress={() => checkLeftover(false)}
+                onPress={() => checkLeftover(true)}
               />
             </View>
             <Text style={styles.text}>
