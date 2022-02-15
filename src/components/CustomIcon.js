@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: globalColors.lightBlue,
+    backgroundColor: globalColors.lightBlue2,
     borderColor: "gray",
   },
 });

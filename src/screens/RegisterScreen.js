@@ -1,12 +1,10 @@
-import {
-  Alert,
-  KeyboardAvoidingView,
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import { Alert, KeyboardAvoidingView, TextInput } from "react-native";
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
+import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
+import { db } from "../firebase";
 import {
   collection,
   deleteDoc,
@@ -15,16 +13,13 @@ import {
   setDoc,
   Timestamp,
 } from "firebase/firestore";
-import { auth } from "../firebase";
-import { db } from "../firebase";
+
 import CustomButton from "../components/CustomButton";
-import globalStyles from "../globalStyles";
 import globalColors from "../globalColors";
-import { useNavigation } from "@react-navigation/native";
+import globalStyles from "../globalStyles";
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
-
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,10 +49,10 @@ const RegisterScreen = () => {
         if (petDocRef) await deleteDoc(doc(db, "pets", petDocRef.id));
         if (userDocRef) await deleteDoc(doc(db, "users", userDocRef.id));
         await deleteUser(auth.currentUser);
-        alert(error.message);
+        Alert.alert(error.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert.alert(error.message);
     }
   };
 
@@ -131,8 +126,8 @@ const RegisterScreen = () => {
   return (
     <KeyboardAvoidingView
       style={globalStyles.container}
-      // behavior={Platform.OS === "ios" ? "padding" : "height"}
-      // enabled
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      enabled
     >
       <TextInput
         onChangeText={(value) => setUsername(value)}

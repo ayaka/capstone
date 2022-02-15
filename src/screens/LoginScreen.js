@@ -5,20 +5,19 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-
-import globalStyles from "../globalStyles";
 import { useNavigation } from "@react-navigation/native";
-import CustomButton from "../components/CustomButton";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
 
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+
+import CustomButton from "../components/CustomButton";
 import globalColors from "../globalColors";
+import globalStyles from "../globalStyles";
 
 const Login = () => {
   const navigation = useNavigation();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -51,8 +50,8 @@ const Login = () => {
   return (
     <KeyboardAvoidingView
       style={globalStyles.container}
-      // behavior={Platform.OS === "ios" ? "padding" : "height"}
-      // enabled
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      enabled
     >
       <TextInput
         onChangeText={(value) => setEmail(value)}

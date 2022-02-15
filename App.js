@@ -1,7 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+// import { StyleSheet } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import LoginScreen from "./src/screens/LoginScreen";
 import GreetingScreen from "./src/screens/GreetingScreen";
@@ -11,13 +13,11 @@ import LocationScreen from "./src/screens/LocationScreen";
 import ImageCaptureScreen from "./src/screens/ImageCaptureScreen";
 import CameraScreen from "./src/screens/CameraScreen";
 import FoodScreen from "./src/screens/FoodScreen";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import globalColors from "./src/globalColors";
+import ProfileScreen from "./src/screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import ProfileScreen from "./src/screens/ProfileScreen";
 const Drawer = createDrawerNavigator();
 
 const DrawerRoutes = () => {
@@ -103,8 +103,27 @@ export default function App() {
                 },
               }}
             />
-            <Stack.Screen name="Camera" component={CameraScreen} />
-            <Stack.Screen name="ImageCapture" component={ImageCaptureScreen} />
+            <Stack.Screen
+              name="Camera"
+              component={CameraScreen}
+              options={{
+                headerTintColor: globalColors.brown,
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="ImageCapture"
+              component={ImageCaptureScreen}
+              options={{
+                title: "Camera Roll",
+                headerTintColor: globalColors.brown,
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
@@ -112,4 +131,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({});
+// const styles = StyleSheet.create({});

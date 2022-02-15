@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import CustomButton from "../components/CustomButton";
+import { useNavigation } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
+
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { useNavigation } from "@react-navigation/native";
-import globalStyles from "../globalStyles";
+
+import CustomButton from "../components/CustomButton";
 import globalColors from "../globalColors";
-import { ActivityIndicator } from "react-native-paper";
+import globalStyles from "../globalStyles";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -28,7 +30,7 @@ const ProfileScreen = () => {
             setLoading(false);
           })
           .catch((error) => {
-            alert(error.message);
+            Alert.alert(error.message);
           });
       } else {
         setLoading(false);
@@ -42,12 +44,12 @@ const ProfileScreen = () => {
       await signOut(auth);
       navigation.replace("Greeting");
     } catch (error) {
-      alert(error.message);
+      Alert.alert(error.message);
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[globalStyles.container, styles.container]}>
       {loading ? (
         <ActivityIndicator />
       ) : (
@@ -60,7 +62,7 @@ const ProfileScreen = () => {
             <Text style={styles.text}>Some Profile Info</Text>
             <Text style={styles.text}>Pet ID: {user.petId}</Text>
           </View>
-          <View style={styles.buttonContainer}>
+          <View style={globalStyles.container}>
             <CustomButton
               onPress={logOut}
               buttonStyle={[globalStyles.button, globalStyles.buttonOutline]}
@@ -83,10 +85,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: globalColors.honeydew,
+    backgroundColor: globalColors.lightBlue,
   },
   mainContainer: {
     flex: 1,
@@ -102,10 +101,12 @@ const styles = StyleSheet.create({
   text: {
     marginVertical: 10,
     fontSize: 18,
+    color: globalColors.brown,
   },
   title: {
     fontSize: 30,
     textAlign: "center",
     fontWeight: "700",
+    color: globalColors.brown,
   },
 });

@@ -1,18 +1,17 @@
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
-
-import globalColors from "../globalColors";
-import CustomIcon from "../components/CustomIcon";
+import { ActivityIndicator } from "react-native-paper";
+import * as Location from "expo-location";
 
 import { db } from "../firebase";
 import { doc, onSnapshot, setDoc, Timestamp } from "firebase/firestore";
 
-import * as Location from "expo-location";
+import CustomIcon from "../components/CustomIcon";
+import globalColors from "../globalColors";
 import globalStyles from "../globalStyles";
-import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -39,10 +38,20 @@ const HomeScreen = () => {
         }
       });
     } catch (error) {
-      alert(error.message);
+      Alert.alert(error.message);
     }
     loadWeather().then((result) => {
-      setWeatherData(result);
+      const {
+        temp,
+        weather: [{ icon, description }],
+      } = result.current;
+      const hourly = result.hourly;
+
+      const data = {
+        current: { temp, weather: [{ icon, description }] },
+        hourly: hourly,
+      };
+      setWeatherData(data);
     });
     return () => unsubscribe();
   }, []);
@@ -62,15 +71,15 @@ const HomeScreen = () => {
       ...data,
       date: Timestamp.now(),
       food: {
-        leftover: [null, null],
-        breakfast: [false, null],
-        dinner: [false, null],
-        treat: [false, null],
+        leftover: [null, null, null],
+        breakfast: [false, null, null],
+        dinner: [false, null, null],
+        treat: [false, null, null],
         extraTreats: 0,
       },
       walk: {
-        am: [false, null],
-        pm: [false, null],
+        am: [false, null, null],
+        pm: [false, null, null],
       },
       outside: [false, null],
     };
@@ -81,11 +90,9 @@ const HomeScreen = () => {
 
   const loadWeather = async () => {
     try {
-      const weatherUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=47&lon=-122&appid=${process.env.WEATHER_API_KEY}`;
-
-      // const location = await loadLocation();
-      // const { latitude, longitude } = location.coords;
-      // const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}`;
+      const location = await loadLocation();
+      const { latitude, longitude } = location.coords;
+      const weatherUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}`;
       const response = await fetch(weatherUrl);
       const result = await response.json();
       if (response.ok) {
@@ -173,12 +180,16 @@ const HomeScreen = () => {
     );
   };
 
-  return loading ? (
-    <SafeAreaView style={styles.container}>
-      <ActivityIndicator animating={true} color={globalColors.blue} />
-    </SafeAreaView>
-  ) : (
-    <SafeAreaView style={styles.container}>
+  if (loading) {
+    return (
+      <SafeAreaView style={[globalStyles.container, styles.container]}>
+        <ActivityIndicator animating={true} color={globalColors.blue} />
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={[globalStyles.container, styles.container]}>
       <View style={styles.mainContainer}>
         <View style={styles.weatherSectionContainer}>
           {weatherData ? (
@@ -270,9 +281,6 @@ const styles = StyleSheet.create({
     right: -13,
   },
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: globalColors.honeydew,
   },
   iconContainer: {
@@ -369,7 +377,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: globalColors.lightBlue,
+    backgroundColor: globalColors.lightBlue2,
     paddingHorizontal: 20,
     shadowColor: globalColors.black,
     shadowOpacity: 0.5,

@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
+
 import { db } from "../firebase";
 import { doc, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 
 import CustomSwitch from "../components/CustomSwitch";
 import globalColors from "../globalColors";
+import globalStyles from "../globalStyles";
 
 const LocationScreen = () => {
   const route = useRoute();
-
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const docRef = doc(db, "pets", route.params.petId);
@@ -48,7 +48,7 @@ const LocationScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[globalStyles.container, styles.container]}>
       {loading ? (
         <Text>Loading...</Text>
       ) : (
@@ -101,9 +101,6 @@ export default LocationScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: globalColors.lightBlue,
   },
   sectionContainer: {

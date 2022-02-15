@@ -1,16 +1,16 @@
-import { Button, StyleSheet, View } from "react-native";
+import { Alert, Button, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { manipulateAsync } from "expo-image-manipulator";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-import globalColors from "../globalColors";
-
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../firebase";
-import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import globalColors from "../globalColors";
 
 const ImageCaptureScreen = () => {
   const navigation = useNavigation();
@@ -48,7 +48,7 @@ const ImageCaptureScreen = () => {
           imageUrl: url,
         }).then(() => navigation.popToTop());
       } catch (error) {
-        alert(error.message);
+        Alert.alert(error.message);
         setUploading(false);
       }
     }

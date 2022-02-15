@@ -1,15 +1,17 @@
-import { Image, StyleSheet, Text, View, Pressable } from "react-native";
+import { Image, StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Camera } from "expo-camera";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { manipulateAsync } from "expo-image-manipulator";
 import { Ionicons } from "@expo/vector-icons";
-import globalColors from "../globalColors";
 
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../firebase";
-import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import globalStyles from "../globalStyles";
+import globalColors from "../globalColors";
 
 const CameraScreen = () => {
   const navigation = useNavigation();
@@ -55,7 +57,7 @@ const CameraScreen = () => {
         imageUrl: url,
       }).then(() => navigation.goBack());
     } catch (error) {
-      alert(error.message);
+      Alert.alert(error.message);
       setUploading(false);
     }
   };
@@ -78,7 +80,7 @@ const CameraScreen = () => {
     return <Text>No access to camera</Text>;
   }
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <View style={styles.topSpace}>
         {imageUri && (
           <View style={styles.imageSectionContainer}>
@@ -116,7 +118,6 @@ const CameraScreen = () => {
           />
         </Pressable>
         <Pressable
-          // style={[styles.iconContainer, styles.cameraIcon]}
           onPress={() => {
             setType(
               type === Camera.Constants.Type.back
@@ -135,16 +136,10 @@ const CameraScreen = () => {
 export default CameraScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   camera: {
     width: "100%",
     aspectRatio: 1,
   },
-
   iconSectionContainer: {
     flex: 1,
     width: "100%",

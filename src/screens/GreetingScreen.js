@@ -1,17 +1,17 @@
-import { LogBox, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, LogBox, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { ActivityIndicator, IconButton } from "react-native-paper";
+
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { useNavigation } from "@react-navigation/native";
 
 import CustomButton from "../components/CustomButton";
 import globalStyles from "../globalStyles";
 import globalColors from "../globalColors";
-import { ActivityIndicator, IconButton } from "react-native-paper";
 
 LogBox.ignoreLogs([
   "AsyncStorage has been extracted from react-native core and will be removed in a future release",
@@ -35,7 +35,7 @@ const GreetingScreen = () => {
             setLoading(false);
           })
           .catch((error) => {
-            alert(error.message);
+            Alert.alert(error.message);
           });
       } else {
         setLoading(false);
@@ -59,7 +59,7 @@ const GreetingScreen = () => {
         };
       }
     } catch (error) {
-      console.log(error.message);
+      Alert.alert(error.message);
     }
   };
 
@@ -97,7 +97,7 @@ const GreetingScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalStyles.container}>
       <View style={styles.greetingContainer}>
         <Greeting />
       </View>
@@ -126,11 +126,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   greeting: {
     flex: 1,
     justifyContent: "space-between",
@@ -147,7 +142,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: globalColors.green,
-    // backgroundColor: "#053225",
     borderRadius: 65,
   },
   text: {

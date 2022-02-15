@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { IconButton, RadioButton } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
@@ -14,7 +13,6 @@ import globalColors from "../globalColors";
 
 const FoodScreen = () => {
   const route = useRoute();
-
   const [food, setFood] = useState(null);
   const [loading, setLoading] = useState(true);
   const docRef = doc(db, "pets", route.params.petId);
@@ -63,7 +61,7 @@ const FoodScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[globalStyles.container, styles.container]}>
       {loading ? (
         <Text>Loading...</Text>
       ) : (
@@ -159,9 +157,6 @@ export default FoodScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: globalColors.lightBlue,
   },
   radioButtonContainer: {
