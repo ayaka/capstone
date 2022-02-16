@@ -53,5 +53,4 @@ expo start
 - [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 
 
-Door Icon made by Darius Dan perfect from www.flaticon.com
-Door Icon made by Freepik from www.flaticon.com
+Door Icon made by Darius Dan / Pet Bowl made by Freepik from www.flaticon.com
