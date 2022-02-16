@@ -32,13 +32,13 @@ It is often hard to keep track of the daily status of our fur baby especially th
 
 1. Clone this repository
 2. Install Expo CLI
-    '''
-    npm install --global expo-cli
-    '''
+'''
+npm install --global expo-cli
+'''
 3. Run Expo CLI
-   '''
-   expo start
-   '''
+'''
+expo start
+'''
 4. Scan QR code on your device to test
 
 
@@ -54,4 +54,5 @@ It is often hard to keep track of the daily status of our fur baby especially th
 
 
 Door Icon made by Darius Dan perfect from www.flaticon.com
+
 Door Icon made by Freepik from www.flaticon.com
