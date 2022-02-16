@@ -1,4 +1,6 @@
 # Who Let The Dog Out
+
+
 ## Mobile App
 
 
@@ -14,6 +16,32 @@ It is often hard to keep track of the daily status of our fur baby especially th
 - take a photo or select a photo from camera roll for your pet
 
 
+## How to Use
+
+
+1. Install Expo Go app for iOS and Android
+    - [iOS App Store](https://itunes.com/apps/exponent) - iOS 11 and greater
+    - [Android Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) - Android Lollipop (5) and greater
+2. Scan QR code [here](https://expo.dev/@ayaka_y/who-let-the-dog-out) from Camera App to Open Expo Go
+   - Android Users: Enjoy the app
+   - iPhone Users: Contact me with your email address to get an invite
+
+
+## Installation
+
+
+1. Clone this repository
+2. Install Expo CLI
+    '''
+    npm install --global expo-cli
+    '''
+3. Run Expo CLI
+   '''
+   expo start
+   '''
+4. Scan QR code on your device to test
+
+
 ## Tech
 
 
@@ -25,12 +53,5 @@ It is often hard to keep track of the daily status of our fur baby especially th
 - [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 
 
-## How to Use
-
-
-1. Install Expo Go app for iOS and Android
-    - [iOS App Store](https://itunes.com/apps/exponent) - iOS 11 and greater
-    - [Android Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) - Android Lollipop (5) and greater
-2. Scan QR code [here](https://expo.dev/@ayaka_y/who-let-the-dog-out) from Camera App to Open Expo Go
-   - Android Users: Enjoy the app
-   - iPhone Users: Contact me with your email address to get an invite
+Door Icon made by Darius Dan perfect from www.flaticon.com
+Door Icon made by Freepik from www.flaticon.com
